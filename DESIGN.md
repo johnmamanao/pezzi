@@ -1,6 +1,6 @@
 # Design direction
 
-Pezzi (formerly Tessloop) is a playful tool for making mosaics that move. The current working identity is in [BRAND.md](BRAND.md). The work began with a request for a mosaic creator, then shifted toward a wholly new identity and studio. The user asked for rounder forms and selected [HeyClicky](https://www.heyclicky.com/) as the strongest landing-page inspiration. The next direction made the entire product dark and brought video import into the studio, informed by the workflow in [Mozayk](https://github.com/stellanjoh2/mozayk).
+Pezzi (formerly Tessloop) is a playful tool for making mosaics that move. The current working identity is in [BRAND.md](BRAND.md). The work began with a request for a mosaic creator, then shifted toward a wholly new identity and studio. The user asked for rounder forms and selected [HeyClicky](https://www.heyclicky.com/) as the strongest landing-page inspiration. The next direction made the entire product dark and brought video import into the studio.
 
 ## Visual system
 
@@ -22,7 +22,7 @@ The footer keeps a spacious four-column layout that reflows into two columns on 
 
 ## Studio configuration, September 2026
 
-The Mozayk creator was inspected for its control model: canvas ratios, density, shape inclusion and mix, custom shape upload, layout randomness, size and spacing, weighted colors, background treatment, overlays, finishing adjustments, and project settings. Tessloop carries these editing relationships into its own dark, rounded sidebar. Each frame stores its own configuration, so changing a control updates the live artboard and can be applied to every frame without replacing imported video pictures. Projects and reusable looks can be saved locally. The mobile version uses the same controls in a slide-in tools panel.
+The studio provides canvas ratios, density, shape inclusion and mix, custom shape upload, layout randomness, size and spacing, weighted colors, background treatment, overlays, finishing adjustments, and project settings in its own dark, rounded sidebar. Each frame stores its own configuration, so changing a control updates the live artboard and can be applied to every frame without replacing imported video pictures. Projects and reusable looks can be saved locally. The mobile version uses the same controls in a slide-in tools panel.
 
 The studio density control supports 6–120 columns. Its renderer clamps loaded values to that range, and custom uploaded shapes reuse a bounded tint cache so dense images do not create thousands of offscreen canvases.
 
