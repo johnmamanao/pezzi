@@ -538,10 +538,14 @@ input[type='range'] { accent-color: #c5f277; }
 .config-wide-action { width: 100%; }
 .config-wide-action:disabled { opacity: .45; cursor: not-allowed; }
 .shape-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
-.shape-list button { min-width: 0; min-height: 36px; display: flex; align-items: center; gap: 8px; padding: 5px 8px; border: 1px solid #414453; border-radius: 12px; background: #272a38; color: #bab9c7; font-size: 10px; font-weight: 700; text-align: left; }
+.shape-list button { min-width: 0; min-height: 48px; display: flex; align-items: center; gap: 8px; padding: 8px; border: 1px solid #414453; border-radius: 12px; background: #272a38; color: #bab9c7; font-size: 10px; font-weight: 700; text-align: left; }
 .shape-list button[aria-pressed='true'] { border-color: #b3a5ff; background: #413b59; color: #fff; }
 .shape-list button:hover { border-color: #a2c7ff; }
-.shape-symbol { width: 18px; color: #c6b9ff; font-size: 16px; text-align: center; }
+.shape-symbol { width: 28px; height: 28px; flex: 0 0 28px; }
+.gallery-mix { margin-top: 10px; }
+.more-shapes { margin-top: 12px; }
+.more-shapes summary { cursor: pointer; padding: 6px 0; color: #bab9c7; font-size: 11px; }
+.more-shapes[open] summary { margin-bottom: 8px; }
 .config-slider { display: block; margin-top: 20px; }
 .config-label { display: flex; justify-content: space-between; gap: 8px; color: #e8e7ef; font-size: 11px; font-weight: 650; }
 .config-label strong { color: #b4cbff; font-variant-numeric: tabular-nums; }

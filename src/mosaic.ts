@@ -1,3 +1,5 @@
+import { galleryPath } from './galleryShapes'
+
 export type Aspect = 'wide' | 'square' | 'classic' | 'portrait'
 export type ShapeStyle = 'playful' | 'rounded' | 'graphic'
 export const MAX_GRID_DENSITY = 120
@@ -16,9 +18,9 @@ export type MosaicConfig = {
 }
 
 export const defaultConfig: MosaicConfig = {
-  shapes: [0, 1, 2, 3, 4, 5, 6, 7], shapeMix: 70, ringThickness: 50,
+  shapes: [0, 1, 3, 25, 26, 27, 28, 29, 30], shapeMix: 100, ringThickness: 50,
   fillAmount: 90, scaleBlend: 3, distribution: 50, maxHeight: 100, maxWidth: 100,
-  randomHeight: false, randomWidth: false, gap: 4, colors: [], colorWeights: [],
+  randomHeight: false, randomWidth: false, gap: 12, colors: [], colorWeights: [],
   background: '', transparent: false, grid: false, gridColor: '#ffffff', gridOpacity: 50,
   gridStroke: 1, gridDensity: 1, gridRandomness: 0, gridBlend: 'source-over',
   crosses: false, crossColor: '#ffffff', crossOpacity: 70, crossSize: 18, crossStroke: 1,
@@ -83,7 +85,7 @@ function roundedRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: num
   ctx.fill()
 }
 
-function tileShape(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, kind: number, style: ShapeStyle, bg: string, ringThickness = 50, cornerRadius = 18) {
+export function tileShape(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, kind: number, style: ShapeStyle, bg: string, ringThickness = 50, cornerRadius = 18) {
   const size = Math.min(w, h)
   const inset = style === 'graphic' ? 0 : size * 0.035
   x += inset
@@ -92,6 +94,15 @@ function tileShape(ctx: CanvasRenderingContext2D, x: number, y: number, w: numbe
   h -= inset * 2
   const cx = x + w / 2
   const cy = y + h / 2
+  const path = galleryPath(kind)
+  if (path) {
+    ctx.save()
+    ctx.translate(x, y)
+    ctx.scale(w / 100, h / 100)
+    ctx.fill(path, 'evenodd')
+    ctx.restore()
+    return
+  }
   const cutout = (draw: () => void) => { ctx.save(); if (bg === 'transparent') ctx.globalCompositeOperation = 'destination-out'; else ctx.fillStyle = bg; draw(); ctx.restore() }
   if (style === 'rounded') {
     if (kind === 0) {

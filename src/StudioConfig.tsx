@@ -1,7 +1,24 @@
 'use client'
 
-import { defaultConfig, palettes, shapeNames } from './mosaic'
+import { useEffect, useRef } from 'react'
+import { defaultConfig, palettes, shapeNames, tileShape } from './mosaic'
+import { galleryShapes } from './galleryShapes'
 import type { MosaicConfig, MosaicFrame } from './mosaic'
+
+function ShapePreview({ kind, frame }: { kind: number; frame: MosaicFrame }) {
+  const ref = useRef<HTMLCanvasElement>(null)
+  const ring = frame.config?.ringThickness ?? defaultConfig.ringThickness
+  const radius = frame.config?.cornerRadius ?? defaultConfig.cornerRadius
+  useEffect(() => {
+    const canvas = ref.current
+    const ctx = canvas?.getContext('2d')
+    if (!canvas || !ctx) return
+    ctx.clearRect(0, 0, 64, 64)
+    ctx.fillStyle = '#c6b9ff'
+    tileShape(ctx, 3, 3, 58, 58, kind, frame.shapeStyle, 'transparent', ring, radius)
+  }, [kind, frame.shapeStyle, ring, radius])
+  return <canvas ref={ref} width={64} height={64} className="shape-symbol" aria-hidden="true" />
+}
 
 function Slider({ label, value, min = 0, max = 100, step = 1, hint, disabled, onChange }: { label: string; value: number; min?: number; max?: number; step?: number; hint?: string; disabled?: boolean; onChange: (value: number) => void }) {
   return <label className="config-slider"><span className="config-label"><span>{label}</span><strong>{value}</strong></span>{hint && <small>{hint}</small>}<input type="range" min={min} max={max} step={step} value={value} disabled={disabled} onChange={event => onChange(Number(event.target.value))} /></label>
@@ -30,6 +47,7 @@ export function StudioConfig({ section, frame, update, updateFrame, randomize, r
   const colors = config.colors.length ? config.colors : [...palette.colors]
   const changeColor = (at: number, color: string) => update({ colors: colors.map((item, index) => index === at ? color : item) })
   const randomColor = () => `#${Math.floor(Math.random() * 0xffffff).toString(16).padStart(6, '0')}`
+  const shapeButton = (id: number, name: string) => <button key={id} type="button" aria-pressed={config.shapes.includes(id)} onClick={() => update({ shapes: config.shapes.includes(id) ? config.shapes.filter(item => item !== id) : [...config.shapes, id] })}><ShapePreview kind={id} frame={frame} />{name}</button>
   function loadImage(file: File | undefined, key: 'backgroundImage' | 'textureImage' | 'customShape') {
     if (!file || !file.type.startsWith('image/')) return
     const url = URL.createObjectURL(file)
@@ -43,7 +61,9 @@ export function StudioConfig({ section, frame, update, updateFrame, randomize, r
     <section className="tool-section config-section" aria-labelledby="layout-config"><div className="tool-heading"><h2 id="layout-config">Layout</h2><span>Compose the pattern</span></div>
       <div className="config-actions"><button type="button" onClick={randomize}>Randomize layout</button><button type="button" onClick={randomizeAll}>Surprise me</button></div>
       <div className="config-subhead"><strong>Shape library</strong><small>Choose what can appear</small></div>
-      <div className="shape-list" role="group" aria-label="Enabled mosaic shapes">{shapeNames.map((name, at) => <button key={name} type="button" aria-pressed={config.shapes.includes(at)} onClick={() => update({ shapes: config.shapes.includes(at) ? config.shapes.filter(item => item !== at) : [...config.shapes, at] })}><span className="shape-symbol" aria-hidden="true">{['▣','●','▲','◎','◕','··','◧','▦','✿','⋮','✕','◠','★','✦','✿','✳','☾','▥','❯','∩','〰','⌒','▧','◡'][at]}</span>{name}</button>)}</div>
+      <div className="shape-list" role="group" aria-label="Enabled mosaic shapes">{galleryShapes.map(shape => shapeButton(shape.id, shape.name))}{shapeNames.slice(0, 4).map((name, at) => shapeButton(at, name))}</div>
+      <button className="config-wide-action gallery-mix" type="button" onClick={() => update({ shapes: [...defaultConfig.shapes], shapeMix: 100, gap: Math.max(12, config.gap) })}>Use gallery mix</button>
+      <details className="more-shapes"><summary>More shapes</summary><div className="shape-list" role="group" aria-label="Additional mosaic shapes">{shapeNames.slice(4).map((name, at) => shapeButton(at + 4, name))}</div></details>
       <label className="config-upload">{frame.customShape ? 'Replace your shape' : 'Add your own shape'}<input type="file" accept="image/png,image/svg+xml,image/webp" onChange={event => loadImage(event.target.files?.[0], 'customShape')} /></label>
       {frame.customShape && <div className="config-actions"><button type="button" onClick={() => update({ shapes: config.shapes.includes(24) ? config.shapes.filter(item => item !== 24) : [...config.shapes, 24] })}>{config.shapes.includes(24) ? 'Hide your shape' : 'Use your shape'}</button><button type="button" onClick={() => { updateFrame({ customShape: undefined }); update({ shapes: config.shapes.filter(item => item !== 24) }) }}>Remove shape</button></div>}
       <Slider label="Shape mix" hint="0 uses boxes · 100 uses your selection" value={config.shapeMix} onChange={shapeMix => update({ shapeMix })} />

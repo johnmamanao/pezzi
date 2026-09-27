@@ -1,5 +1,11 @@
 # Design direction
 
+## Shape library refinement, September 2026
+
+The user selected [Shapes Gallery](https://www.shapes.gallery/) as inspiration for the studio's forms. The inspected desktop gallery shows quarter-circle pinwheels, curved ribbons, opposed semicircular bands, and geometric cutouts. Pezzi uses six original canvas paths informed by those relationships: Pinwheels, Ribbons, Hourglasses, Inward stars, Petal rings, and Round crosses. Geometry is owned by `src/galleryShapes.ts` and cached as Path2D objects; the studio chooser renders previews through the same `tileShape` function as playback and exports. No reference SVG assets were copied.
+
+New canvases use a curated mix with a 12% tile gap, replacing the tight 4% default. Existing saved configurations retain their own gaps and enabled shapes. IDs 0–23 and custom upload ID 24 are preserved; the new shapes occupy IDs 25–30. The "Use gallery mix" action applies the curated selection to existing frames through the normal automatic look update. Older shapes remain accessible under "More shapes", keeping the initial chooser compact. The desktop and 390px mobile chooser were visually inspected; preview labels fit and a shape toggle updated its selected state. Typecheck and production build passed. The landing's existing prerendered demo videos retain their original artwork.
+
 Pezzi (formerly Tessloop) is a playful tool for making mosaics that move. The current working identity is in [BRAND.md](BRAND.md). The work began with a request for a mosaic creator, then shifted toward a wholly new identity and studio. The user asked for rounder forms and selected [HeyClicky](https://www.heyclicky.com/) as the strongest landing-page inspiration. The next direction made the entire product dark and brought video import into the studio.
 
 ## Visual system
